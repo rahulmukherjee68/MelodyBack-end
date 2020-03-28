@@ -45,7 +45,7 @@ Artist.getTopTenArtist = (newArtist, result) => {
 };
 Artist.getAllArtist = (newArtist, result) => {
     if (newArtist) {
-        sql.query(`Select * from artists`,
+        sql.query(`Select id as id ,name as itemName  from artists`,
             (err, res) => {
 
                 if (err) {

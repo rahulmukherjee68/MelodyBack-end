@@ -34,7 +34,8 @@ router.post('/', (req, res, next) => {
         }
         else
         {
-            res.status(200).json({status:true,id:doc})
+            
+            res.status(200).json({status:true,doc:doc})
         }
     });
 });
