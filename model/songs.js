@@ -57,10 +57,10 @@ Song.updateSongById = function (songList, result) {
 
 Song.getTopTenSongs = function (songList, result) {
     if (songList) {
-        sql.query(`SELECT DISTINCT songs.id as song_id,songs.name as song_name,
+        sql.query(`SELECT DISTINCT songs.id as song_id,songs.name as song_name, songs.date_of_release,
         songs.rating as song_rating,songs.image_file_path,artists.name as artist_name, 
-        artists.id as artist_id FROM artist_song_map RIGHT JOIN songs ON artist_song_map.song_id=songs.id 
-        RIGHT JOIN artists ON artist_song_map.id = artists.id ORDER by songs.rating DESC`,
+        artists.id as artist_id ,artists.date_of_birth FROM artist_song_map RIGHT JOIN songs ON artist_song_map.song_id=songs.id 
+        RIGHT JOIN artists ON artist_song_map.artist_id = artists.id ORDER by songs.rating DESC`,
             (err, res) => {
 
                 if (err) {
@@ -87,3 +87,6 @@ module.exports = Song;
 
 
 //SELECT artist_song_map.id, songs.id,songs.name,songs.rating,artists.name, artists.id FROM artist_song_map RIGHT JOIN songs ON artist_song_map.song_id=songs.id RIGHT JOIN artists ON artist_song_map.id = artists.id ORDER by songs.rating DESC
+
+
+//SELECT songs.id as song_id,artists.name as artist_name, artists.id as artist_id FROM artists LEFT JOIN artist_song_map ON artists.id=artist_song_map.artist_id LEFT JOIN songs ON songs.id=artist_song_map.song_id ORDER by songs.rating DESC

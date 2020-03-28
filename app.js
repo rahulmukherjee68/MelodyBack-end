@@ -34,7 +34,7 @@ app.use('/addSong',songRouter);
 app.use('/addArtist',artistRouter);
 app.use('/addMap',mapRouter);
 app.use('/rate',starRouter);
-app.use('/getAllTopTenSongs',getAllRouter);
+app.use('/getAll',getAllRouter);
 // End of routes //
 
 
