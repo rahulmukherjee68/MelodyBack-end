@@ -43,5 +43,25 @@ Artist.getTopTenArtist = (newArtist, result) => {
         result("provided incorrect parameters")
     }
 };
+Artist.getAllArtist = (newArtist, result) => {
+    if (newArtist) {
+        sql.query(`Select * from artists`,
+            (err, res) => {
+
+                if (err) {
+                    console.log("error: ", err);
+                    result(err, null);
+                }
+                else {
+                    console.log(res);
+                    result(null, res);
+                }
+            });
+    }
+    else {
+        result("provided incorrect parameters")
+    }
+};
+
 
 module.exports = Artist;

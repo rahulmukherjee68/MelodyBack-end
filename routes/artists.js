@@ -24,5 +24,19 @@ router.post('/', (req, res, next) => {
         });
     }
 
+})
+.get('/artist',(req,res,next)=>{
+    Artist.getAllArtist(true,(err,doc)=>{
+        if(err)
+        {
+            res.status(400).json({status:false,message:err});
+   
+        }
+        else
+        {
+            res.status(200).json({status:true,id:doc})
+        }
+    });
 });
+
 module.exports = router;

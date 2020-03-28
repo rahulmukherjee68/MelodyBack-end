@@ -64,7 +64,6 @@ function getDocTopTenSongs(doc) {
 
 
     }
-    // console.log();
 
     return (arr);
 }
@@ -77,8 +76,8 @@ async function getDocTopTenArtist(doc) {
     var j = 0;
     console.log(doc.length);
     for (i = 0; i < doc.length; i++) {
-       
-        
+
+
         if (i == 0) {
 
             res[j] =
@@ -92,31 +91,24 @@ async function getDocTopTenArtist(doc) {
                 }]
             }
 
-            //console.log(res[j]);
-
-
             if (map.set(doc[i].artist_id, j)) {
                 temp.push(doc[i].artist_id);
             }
 
         }
-        else
-        {
-            var search =await recursiveFunction(temp, doc[i].artist_id, 0, temp.length);
+        else {
+            var search = await recursiveFunction(temp, doc[i].artist_id, 0, temp.length);
 
-            if(search)
-            {
-                //console.log(search);
-                //console.log("doc 4",map.get(doc[i].artist_id));
-               // console.log("doc 5",res[map.get(doc[i].artist_id)]);
+            if (search) {
+
                 res[map.get(doc[i].artist_id)].songs.push({
                     song_id: doc[i].song_id,
                     song_name: doc[i].song_name
                 })
-                
+
             }
-            else{
-                j=j+1
+            else {
+                j = j + 1
                 res[j] =
                 {
                     artist_id: doc[i].artist_id,
@@ -127,10 +119,7 @@ async function getDocTopTenArtist(doc) {
                         song_name: doc[i].song_name
                     }]
                 }
-    
-                //console.log(res[j]);
-    
-    
+
                 if (map.set(doc[i].artist_id, j)) {
                     temp.push(doc[i].artist_id);
                 }
@@ -138,7 +127,7 @@ async function getDocTopTenArtist(doc) {
             }
         }
     }
-    //console.log(res);
+
 
     return res;
 }
@@ -155,12 +144,7 @@ router.get('/', (req, res, next) => {
             var songs = await getDocTopTenSongs(doc);
             var artist = await getDocTopTenArtist(doc);
             res.status(200).json({ status: true, songs: songs, artist: artist });
-            // getDocTopTenSongs(doc).then((result_song)=>{
-            //     getDocTopTenArtist(doc).then((result_artist=>{
-            //         res.status(200).json({ status: true, songs: result_song, artist: result_artist });
 
-            //     })
-            // });
 
         }
 
