@@ -31,7 +31,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 // routes //
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
+app.use('/user', usersRouter);
 app.use('/addSong',songRouter);
 app.use('/addArtist',artistRouter);
 app.use('/addMap',mapRouter);
