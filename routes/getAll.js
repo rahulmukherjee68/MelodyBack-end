@@ -152,4 +152,24 @@ router.get('/', (req, res, next) => {
 
 
 });
+
+
+router.post('/', (req, res, next) => {
+
+
+    Song.searchSong(req.body.query, async (err, doc) => {
+        if (err) {
+            res.status(400).json({ status: false, message: err });
+        }
+        else {
+            var songs = await getDocTopTenSongs(doc);
+            res.status(200).json({ status: true, songs: songs });
+
+
+        }
+
+    });
+
+
+});
 module.exports = router;

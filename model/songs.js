@@ -78,6 +78,26 @@ Song.getTopTenSongs = function (songList, result) {
     }
 };
 
+Song.searchSong = function (query, result) {
+    if (query) {
+        sql.query(`SELECT DISTINCT songs.id as song_id,songs.name as song_name, songs.date_of_release,
+        songs.rating as song_rating,songs.image_file_path,artists.name as artist_name, 
+        artists.id as artist_id ,artists.date_of_birth FROM artist_song_map RIGHT JOIN songs ON artist_song_map.song_id=songs.id and songs.name LIKE '`+ query + `%` + `'
+        RIGHT JOIN artists ON artist_song_map.artist_id = artists.id ORDER by songs.rating DESC`,
+            (err, res) => {
+
+                if (err) {
+                    console.log("error: ", err);
+                    result(err, null);
+                }
+                else {
+                    console.log(res);
+                    result(null, res);
+                }
+            });
+    }
+}
+
 module.exports = Song;
 
 
