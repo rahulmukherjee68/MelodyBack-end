@@ -37,6 +37,7 @@ function getDocTopTenSongs(doc) {
                 song_id: doc[i].song_id,
                 song_name: doc[i].song_name,
                 song_artwork: doc[i].image_file_path,
+                song_rating: doc[i].song_rating,
                 date_of_release: doc[i].date_of_release,
                 artist: [{
                     artist_id: doc[i].artist_id,
@@ -56,6 +57,7 @@ function getDocTopTenSongs(doc) {
                 song_id: doc[i].song_id,
                 song_name: doc[i].song_name,
                 song_artwork: doc[i].image_file_path,
+                song_rating: doc[i].song_rating,
                 date_of_release: doc[i].date_of_release,
                 artist: [{
                     artist_id: doc[i].artist_id,
@@ -165,6 +167,48 @@ async function getDocTopTenArtist(doc) {
     return res;
 }
 
+async function getSearchSongs(doc) {
+    var i = 0;
+    let arr = [];
+    var j = 0;
+    for (i = 0; i < doc.length; i++) {
+        if (i == 0) {
+            arr[j] = {
+                song_id: doc[i].id,
+                song_name: doc[i].name,
+                song_artwork: doc[i].image_file_path,
+                song_rating: doc[i].rating,
+                date_of_release: doc[i].date_of_release,
+                artist: [{
+                    artist_name: doc[i].artist_name
+                }]
+            };
+        }
+        else if (doc[i].song_id == doc[i - 1].song_id) {
+            arr[j].artist.push({
+                artist_name: doc[i].artist_name
+            })
+        }
+        else {
+            j = j + 1;
+            arr[j] = {
+                song_id: doc[i].id,
+                song_name: doc[i].name,
+                song_artwork: doc[i].image_file_path,
+                song_rating: doc[i].rating,
+                date_of_release: doc[i].date_of_release,
+                artist: [{
+                    artist_name: doc[i].artist_name
+                }]
+            };
+        }
+
+
+    }
+
+    return (arr);
+}
+
 
 router.get('/', (req, res, next) => {
 
@@ -177,13 +221,11 @@ router.get('/', (req, res, next) => {
             var songs = await getDocTopTenSongs(doc);
             var artist = await getDocTopTenArtist(doc);
 
-            if(songs.length>10)
-            {
-                songs=songs.slice(0,10);
+            if (songs.length > 10) {
+                songs = songs.slice(0, 10);
             }
-            if(artist.length>10)
-            {
-                artist=artist.slice(0,10);
+            if (artist.length > 10) {
+                artist = artist.slice(0, 10);
             }
             res.status(200).json({ status: true, songs: songs, artist: artist });
 
@@ -215,7 +257,7 @@ router.post('/', (req, res, next) => {
             res.status(200).json({ status: false, message: err });
         }
         else {
-            var songs = await getDocTopTenSongs(doc);
+            var songs = await getSearchSongs(doc);
             res.status(200).json({ status: true, songs: songs });
 
 

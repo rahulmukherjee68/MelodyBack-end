@@ -80,10 +80,11 @@ Song.getTopTenSongs = function (songList, result) {
 
 Song.searchSong = function (query, result) {
     if (query) {
-        sql.query(`SELECT DISTINCT songs.id as song_id,songs.name as song_name, songs.date_of_release,
-        songs.rating as song_rating,songs.image_file_path,artists.name as artist_name, 
-        artists.id as artist_id ,artists.date_of_birth FROM artist_song_map RIGHT JOIN songs ON artist_song_map.song_id=songs.id and songs.name LIKE '`+ query + `%` + `'
-        RIGHT JOIN artists ON artist_song_map.artist_id = artists.id ORDER by songs.rating DESC`,
+        sql.query(`SELECT songs.id,songs.date_of_release,songs.name,songs.image_file_path,songs.rating,artists.name as
+         artist_name from songs,artist_song_map,artists where songs.name LIKE'` + query + `%` + `' and 
+         songs.id=artist_song_map.song_id and artist_song_map.artist_id=artists.id order by songs.name`,
+
+
             (err, res) => {
 
                 if (err) {
