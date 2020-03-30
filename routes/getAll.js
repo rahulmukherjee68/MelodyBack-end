@@ -1,6 +1,8 @@
 'use strict';
 
 var Song = require('../model/songs');
+var Artist = require('../model/artists');
+
 const express = require('express');
 const router = express.Router();
 
@@ -71,24 +73,40 @@ function getDocTopTenSongs(doc) {
 async function getDocTopTenArtist(doc) {
     var i = 0;
     var temp = [];
-    var res = ['apple'];
+    var res = [];
     let map = new Map();
     var j = 0;
     console.log(doc.length);
+
     for (i = 0; i < doc.length; i++) {
 
 
         if (i == 0) {
+            if (doc[i].Bio == null) {
+                res[j] =
+                {
+                    artist_id: doc[i].artist_id,
+                    artist_name: doc[i].artist_name,
+                    artist_dob: doc[i].date_of_birth,
+                    songs: [{
+                        song_id: doc[i].song_id,
+                        song_name: doc[i].song_name
+                    }]
+                }
+            }
+            else {
+                res[j] =
+                {
+                    artist_id: doc[i].artist_id,
+                    artist_name: doc[i].artist_name,
+                    artist_dob: doc[i].date_of_birth,
+                    artist_bio: doc[i].Bio,
+                    songs: [{
+                        song_id: doc[i].song_id,
+                        song_name: doc[i].song_name
+                    }]
+                }
 
-            res[j] =
-            {
-                artist_id: doc[i].artist_id,
-                artist_name: doc[i].artist_name,
-                artist_dob: doc[i].date_of_birth,
-                songs: [{
-                    song_id: doc[i].song_id,
-                    song_name: doc[i].song_name
-                }]
             }
 
             if (map.set(doc[i].artist_id, j)) {
@@ -109,15 +127,30 @@ async function getDocTopTenArtist(doc) {
             }
             else {
                 j = j + 1
-                res[j] =
-                {
-                    artist_id: doc[i].artist_id,
-                    artist_name: doc[i].artist_name,
-                    artist_dob: doc[i].date_of_birth,
-                    songs: [{
-                        song_id: doc[i].song_id,
-                        song_name: doc[i].song_name
-                    }]
+                if (doc[i].Bio == null) {
+                    res[j] =
+                    {
+                        artist_id: doc[i].artist_id,
+                        artist_name: doc[i].artist_name,
+                        artist_dob: doc[i].date_of_birth,
+                        songs: [{
+                            song_id: doc[i].song_id,
+                            song_name: doc[i].song_name
+                        }]
+                    }
+                }
+                else {
+                    res[j] =
+                    {
+                        artist_id: doc[i].artist_id,
+                        artist_name: doc[i].artist_name,
+                        artist_dob: doc[i].date_of_birth,
+                        artist_bio: doc[i].Bio,
+                        songs: [{
+                            song_id: doc[i].song_id,
+                            song_name: doc[i].song_name
+                        }]
+                    }
                 }
 
                 if (map.set(doc[i].artist_id, j)) {
@@ -138,11 +171,20 @@ router.get('/', (req, res, next) => {
 
     Song.getTopTenSongs(true, async (err, doc) => {
         if (err) {
-            res.status(400).json({ status: false, message: err });
+            res.status(200).json({ status: false, message: err });
         }
         else {
             var songs = await getDocTopTenSongs(doc);
             var artist = await getDocTopTenArtist(doc);
+
+            if(songs.length>10)
+            {
+                songs=songs.slice(0,10);
+            }
+            if(artist.length>10)
+            {
+                artist=artist.slice(0,10);
+            }
             res.status(200).json({ status: true, songs: songs, artist: artist });
 
 
@@ -151,7 +193,18 @@ router.get('/', (req, res, next) => {
     });
 
 
-});
+})
+    .get('/getArtistOrderByName', (req, res, next) => {
+        Artist.getArtistOrderByName(true, async (err, doc) => {
+            if (err) {
+                res.status(200).json({ status: false, message: err });
+            }
+            else {
+                var artist = await getDocTopTenArtist(doc);
+                res.status(200).json({ status: true, doc: artist })
+            }
+        })
+    });
 
 
 router.post('/', (req, res, next) => {
@@ -159,7 +212,7 @@ router.post('/', (req, res, next) => {
 
     Song.searchSong(req.body.query, async (err, doc) => {
         if (err) {
-            res.status(400).json({ status: false, message: err });
+            res.status(200).json({ status: false, message: err });
         }
         else {
             var songs = await getDocTopTenSongs(doc);

@@ -22,11 +22,12 @@ Artist.createArtist = (newArtist, result) => {
         }
     });
 };
-Artist.getTopTenArtist = (newArtist, result) => {
+Artist.getArtistOrderByName = (newArtist, result) => {
     if (newArtist) {
-        sql.query(`SELECT artists.name as artist_name, artists.id as artist_id,songs.id,songs.name 
+        sql.query(`SELECT artists.name as artist_name,artists.Bio, artists.id as artist_id , artists.date_of_birth, songs.id as song_id,
+        songs.name as song_name
         FROM artists ,artist_song_map ,songs WHERE artist_song_map.artist_id=artists.id 
-        and artist_song_map.song_id=songs.id ORDER by songs.rating DESC`,
+        and artist_song_map.song_id=songs.id ORDER by artists.name`,
             (err, res) => {
 
                 if (err) {
@@ -45,7 +46,7 @@ Artist.getTopTenArtist = (newArtist, result) => {
 };
 Artist.getAllArtist = (newArtist, result) => {
     if (newArtist) {
-        sql.query(`Select id as id ,name as itemName  from artists`,
+        sql.query(`Select id as id ,name as itemName ,date_of_birth,Bio  from artists`,
             (err, res) => {
 
                 if (err) {

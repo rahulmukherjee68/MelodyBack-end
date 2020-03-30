@@ -8,7 +8,7 @@ async function saveUser(data,res) {
   var new_user = new User(data);
   User.createUser(new_user, (err, doc) => {
     if (err) {
-      res.status(400).json({ status: false, message: err });
+      res.status(200).json({ status: false, message: err });
     }
     else {
       res.status(200).json({ status: true, id: doc })
@@ -21,7 +21,7 @@ router.post('/', function (req, res, next) {
 
   User.findUser(req.body.email, (err, doc) => {
     if (err) {
-      res.status(400).json({ status: false, message: err });
+      res.status(200).json({ status: false, message: err });
     }
     else {
       if (doc.length == 0) {

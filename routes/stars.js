@@ -9,12 +9,12 @@ router.post('/', (req, res, next) => {
     var total_rating = req.body.total_rating;
     var total_users_rated = req.body.total_users_rated;
     if (!id) {
-        res.status(400).json({ status: false, message: 'Update Id Not Provided' });
+        res.status(200).json({ status: false, message: 'Update Id Not Provided' });
     }
     else {
         Song.getSongById(id, (err, doc) => {
             if (err) {
-                res.status(400).json({ status: false, message: err });
+                res.status(200).json({ status: false, message: err });
 
             }
             else {
@@ -31,7 +31,7 @@ router.post('/', (req, res, next) => {
                      };
                 Song.updateSongById(new_update, (err, doc) => {
                     if (err) {
-                        res.status(400).json({ status: false, message: err });
+                        res.status(200).json({ status: false, message: err });
                     }
                     else {
                         res.status(200).json({

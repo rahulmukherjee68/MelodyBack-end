@@ -13,14 +13,14 @@ async function addMap(song_id, artists, res) {
         var new_map = new Map(obj);
         if (!new_map.song_id) {
 
-            res.status(400).json({ status: false, message: 'Id Of artist or Song not provided in body' });
+            res.status(200).json({ status: false, message: 'Id Of artist or Song not provided in body' });
 
         }
         else {
             j = j + 1;
             var result = await Map.createMap(new_map, async (err, doc) => {
                 if (err) {
-                    res.status(400).json({ status: false, message: err });
+                    res.status(200).json({ status: false, message: err });
                 }
                 else {
                     if (doc) {
